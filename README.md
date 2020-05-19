@@ -13,6 +13,7 @@ Tensorflow implementation of optimizing a neural representation for a single sce
   \*denotes equal contribution  
 
 
+
 <img src='imgs/pipeline.jpg'/>
 
 ## TL;DR quickstart
