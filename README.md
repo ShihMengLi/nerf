@@ -10,7 +10,7 @@ Tensorflow implementation of optimizing a neural representation for a single sce
  [Ravi Ramamoorthi](http://cseweb.ucsd.edu/~ravir/)<sup>3</sup>,
  [Ren Ng](https://www2.eecs.berkeley.edu/Faculty/Homepages/yirenng.html)<sup>1</sup> <br>
  <sup>1</sup>UC Berkeley, <sup>2</sup>Google Research, <sup>3</sup>UC San Diego  
-  \*denotes equal contribution  
+  \*denotes equal contribution
 
 
 
