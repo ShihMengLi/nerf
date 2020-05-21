@@ -597,6 +597,7 @@ def train():
 
         if args.llffhold > 0:
             print('Auto LLFF holdout,', args.llffhold)
+            import pdb; pdb.set_trace()
             i_test = np.arange(images.shape[0])[::args.llffhold]
 
         i_val = i_test
