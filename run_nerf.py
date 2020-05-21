@@ -576,7 +576,6 @@ def train():
 
     parser = config_parser()
     args = parser.parse_args()
-    import pdb; pdb.set_trace()
     if args.random_seed is not None:
         print('Fixing random seed', args.random_seed)
         np.random.seed(args.random_seed)
