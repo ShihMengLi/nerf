@@ -94,7 +94,7 @@ def _load_data(basedir, factor=None, width=None, height=None, load_imgs=True):
         return
     
     imgfiles = [os.path.join(imgdir, f) for f in sorted(os.listdir(imgdir)) if f.endswith('JPG') or f.endswith('jpg') or f.endswith('png')]
-    import pdb; pdb.set_Trace()
+    import pdb; pdb.set_trace()
     if poses.shape[-1] != len(imgfiles):
         print( 'Mismatch between imgs {} and poses {} !!!!'.format(len(imgfiles), poses.shape[-1]) )
         return
