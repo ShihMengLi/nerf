@@ -3,7 +3,7 @@ basedir = ./logs
 datadir = ./data/selected_examples/23d7f14af4b7ba08_200266733_200133267/
 dataset_type = llff
 
-factor = 8
+factor = 1
 llffhold = 8
 
 N_rand = 1024
