@@ -307,7 +307,6 @@ def load_llff_data(basedir, factor=8, recenter=True, bd_factor=.75, spherify=Fal
     print(poses.shape, images.shape, bds.shape)
     
     dists = np.sum(np.square(c2w[:3,3] - poses[:,:3,3]), -1)
-    import pdb; pdb.set_trace()
     i_test = np.argmin(dists)
     print('HOLDOUT view is', i_test)
     
