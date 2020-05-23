@@ -580,7 +580,7 @@ def train():
         print('Fixing random seed', args.random_seed)
         np.random.seed(args.random_seed)
         tf.compat.v1.set_random_seed(args.random_seed)
-
+    import pdb; pdb.set_trace()
     # Load data
 
     if args.dataset_type == 'llff':
