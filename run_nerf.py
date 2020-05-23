@@ -600,7 +600,7 @@ def train():
 
         i_val = i_test
         i_train = np.array([i for i in np.arange(int(images.shape[0])) if
-                            (i not in i_test and i not in i_val)])
+                            (int(images.shape[0]) < 3) or (i not in i_test and i not in i_val)])
 
         print('DEFINING BOUNDS')
         if args.no_ndc:
