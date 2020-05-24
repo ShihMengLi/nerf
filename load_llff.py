@@ -77,8 +77,8 @@ def _load_data(basedir, factor=None, width=None, height=None, load_imgs=True):
             render_poses = np.concatenate([render_poses, np.tile(np.array([0,0,0,1]).reshape(1, 1, 4), (num_render_poses, 1, 1))], axis=1)
             render_poses = np.linalg.inv(render_poses)
             render_poses = np.concatenate([render_poses[:, :3], np.tile(poses[:, 4:5, 0:1].reshape(1, 3, 1), (num_render_poses, 1, 1))], axis=-1)
-            render_poses = np.concatenate([render_poses[:, 1:2, :], render_poses[:, 0:1, :], -render_poses[:, 2:3, :], 
-                                           render_poses[:, 3:4, :], render_poses[:, 4:5, :]], axis=-1)
+            render_poses = np.concatenate([render_poses[:, :, 1:2], render_poses[:, :, 0:1], -render_poses[:, :, 2:3], 
+                                           render_poses[:, :, 3:4], render_poses[:, :, 4:5]], axis=-1)
             render_poses = render_poses.transpose([1,2,0])
             # NOTE: We trim the 'render_poses' for quick test on correctness, need to use full poses later.
             render_poses = render_poses[..., :3]
