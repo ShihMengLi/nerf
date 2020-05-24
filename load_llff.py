@@ -73,6 +73,8 @@ def _load_data(basedir, factor=None, width=None, height=None, load_imgs=True):
             handle.readline()
             render_poses_arr = np.loadtxt(handle)
             render_poses = render_poses_arr.reshape([-1, 3, 5]).transpose([1,2,0])
+            # NOTE: We trim the 'render_poses' for quick test on correctness, need to use full poses later.
+            render_poses = render_poses[:3, ...]
             # x = np.transpose(np.reshape(x, [-1,5,3]), [0,2,1])
             # x = np.concatenate([-x[...,1:2], x[...,0:1], x[...,2:]], -1)
     img0 = [os.path.join(basedir, 'images', f) for f in sorted(os.listdir(os.path.join(basedir, 'images'))) \
