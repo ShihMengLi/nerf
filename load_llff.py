@@ -80,14 +80,12 @@ def _load_data(basedir, factor=None, width=None, height=None, load_imgs=True):
             render_poses = np.concatenate([render_poses[:, :, 1:2], render_poses[:, :, 0:1], -render_poses[:, :, 2:3], 
                                            render_poses[:, :, 3:4], render_poses[:, :, 4:5]], axis=-1)
             render_poses = render_poses.transpose([1,2,0])
-            # NOTE: We trim the 'render_poses' for quick test on correctness, need to use full poses later.
             render_poses = render_poses[..., :3]
             # x = np.transpose(np.reshape(x, [-1,5,3]), [0,2,1])
             # x = np.concatenate([-x[...,1:2], x[...,0:1], x[...,2:]], -1)
     img0 = [os.path.join(basedir, 'images', f) for f in sorted(os.listdir(os.path.join(basedir, 'images'))) \
             if f.endswith('JPG') or f.endswith('jpg') or f.endswith('png')][0]
     sh = imageio.imread(img0).shape
-    import pdb; pdb.set_trace()
     sfx = ''
     
     if factor is not None:
