@@ -75,7 +75,6 @@ def _load_data(basedir, factor=None, width=None, height=None, load_imgs=True):
             render_poses = render_poses_arr.reshape([-1, 3, 5]).transpose([1,2,0])
             # x = np.transpose(np.reshape(x, [-1,5,3]), [0,2,1])
             # x = np.concatenate([-x[...,1:2], x[...,0:1], x[...,2:]], -1)
-    import pdb; pdb.set_trace()
     img0 = [os.path.join(basedir, 'images', f) for f in sorted(os.listdir(os.path.join(basedir, 'images'))) \
             if f.endswith('JPG') or f.endswith('jpg') or f.endswith('png')][0]
     sh = imageio.imread(img0).shape
@@ -118,8 +117,8 @@ def _load_data(basedir, factor=None, width=None, height=None, load_imgs=True):
         render_poses[:2, 4, :] = np.array(sh[:2]).reshape([2, 1])
         render_poses[2, 4, :] = render_poses[2, 4, :] * 1./factor
     # NOTE: The focal length of "render poses" is incorrect !
-    print("Check the correctness of render poses.")
-    import pdb; pdb.set_trace()
+    # print("Check the correctness of render poses.")
+    # import pdb; pdb.set_trace()
     
     if not load_imgs:
         return poses, bds

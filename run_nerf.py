@@ -601,7 +601,7 @@ def train():
         i_val = i_test
         i_train = np.array([i for i in np.arange(int(images.shape[0])) if
                             (int(images.shape[0]) < 3) or (i not in i_test and i not in i_val)])
-                            
+
         print('DEFINING BOUNDS')
         if args.no_ndc:
             near = tf.reduce_min(bds) * .9
@@ -676,7 +676,6 @@ def train():
     }
     render_kwargs_train.update(bds_dict)
     render_kwargs_test.update(bds_dict)
-    import pdb; pdb.set_trace()
     # Short circuit if only rendering out from trained model
     if args.render_only:
         print('RENDER ONLY')
