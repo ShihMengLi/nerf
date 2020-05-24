@@ -68,11 +68,14 @@ def _load_data(basedir, factor=None, width=None, height=None, load_imgs=True):
     # Loading poses represents the camera trajectory of output testing video
     # Default is None
     render_poses = None
-    if os.path.isfile(os.path.join(basedir, 'traj_15-fmt.txt')):
-        with open(os.path.join(basedir, 'traj_15-fmt.txt'), 'r') as handle:
+    if os.path.isfile(os.path.join(basedir, 'trajectory.tgts')):
+        with open(os.path.join(basedir, 'trajectory.tgts'), 'r') as handle:
             handle.readline()
             render_poses_arr = np.loadtxt(handle)
-            render_poses = render_poses_arr.reshape([-1, 3, 5]).transpose([1,2,0])
+            render_poses = render_poses_arr.reshape([-1, 3, 4])
+            render_poses = np.concatenate([render_poses[..., 1:2], render_poses[..., 0:1], -render_poses[..., 2:3], render_poses[..., 3:4]], axis=-1)
+            render_poses = np.concantenate([render_poses, np.tile(poses[0:1, :, 4:5], (render_poses.shape[0], 1, 1))], axis=-1)
+            render_poses = render_poses.transpose([1,2,0])
             # NOTE: We trim the 'render_poses' for quick test on correctness, need to use full poses later.
             render_poses = render_poses[..., :3]
             # x = np.transpose(np.reshape(x, [-1,5,3]), [0,2,1])
@@ -80,7 +83,7 @@ def _load_data(basedir, factor=None, width=None, height=None, load_imgs=True):
     img0 = [os.path.join(basedir, 'images', f) for f in sorted(os.listdir(os.path.join(basedir, 'images'))) \
             if f.endswith('JPG') or f.endswith('jpg') or f.endswith('png')][0]
     sh = imageio.imread(img0).shape
-    
+    import pdb; pdb.set_trace()
     sfx = ''
     
     if factor is not None:
