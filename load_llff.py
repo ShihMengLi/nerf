@@ -72,7 +72,7 @@ def _load_data(basedir, factor=None, width=None, height=None, load_imgs=True):
         with open(os.path.join(basedir, 'traj_15-fmt.txt'), 'r') as handle:
             handle.readline()
             render_poses_arr = np.loadtxt(handle)
-            render_poses = render_poses_arr[:, :-2].reshape([-1, 3, 5]).transpose([1,2,0])
+            render_poses = render_poses_arr.reshape([-1, 3, 5]).transpose([1,2,0])
             # x = np.transpose(np.reshape(x, [-1,5,3]), [0,2,1])
             # x = np.concatenate([-x[...,1:2], x[...,0:1], x[...,2:]], -1)
     import pdb; pdb.set_trace()
