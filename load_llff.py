@@ -185,6 +185,7 @@ def recenter_poses(poses, render_poses=None):
 
     render_exist = isinstance(render_poses, np.ndarray)
     poses_ = poses+0
+    render_poses_ = render_poses+0 if render_exist else None
     bottom = np.reshape([0,0,0,1.], [1,4])
     c2w = poses_avg(poses)
     c2w = np.concatenate([c2w[:3,:4], bottom], -2)
