@@ -68,8 +68,8 @@ def _load_data(basedir, factor=None, width=None, height=None, load_imgs=True):
     # Loading poses represents the camera trajectory of output testing video
     # Default is None
     render_poses = None
-    if os.path.isfile(os.path.join(base_dir, 'traj_15-fmt.txt')):
-        with open(os.path.join(base_dir, 'traj_15-fmt.txt'), 'r') as handle:
+    if os.path.isfile(os.path.join(basedir, 'traj_15-fmt.txt')):
+        with open(os.path.join(basedir, 'traj_15-fmt.txt'), 'r') as handle:
             handle.readline()
             render_poses_arr = np.loadtxt(handle)
             render_poses = render_poses_arr[:, :-2].reshape([-1, 3, 5]).transpose([1,2,0])
@@ -117,7 +117,10 @@ def _load_data(basedir, factor=None, width=None, height=None, load_imgs=True):
     if render_poses_arr is not None:
         render_poses[:2, 4, :] = np.array(sh[:2]).reshape([2, 1])
         render_poses[2, 4, :] = render_poses[2, 4, :] * 1./factor
-
+        
+    print("Check the correctness of render poses.")
+    import pdb; pdb.set_trace()
+    
     if not load_imgs:
         return poses, bds
     
