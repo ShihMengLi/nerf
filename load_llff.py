@@ -75,7 +75,7 @@ def _load_data(basedir, factor=None, width=None, height=None, load_imgs=True):
             render_poses = render_poses_arr[:, :-2].reshape([-1, 3, 5]).transpose([1,2,0])
             # x = np.transpose(np.reshape(x, [-1,5,3]), [0,2,1])
             # x = np.concatenate([-x[...,1:2], x[...,0:1], x[...,2:]], -1)
-
+    import pdb; pdb.set_trace()
     img0 = [os.path.join(basedir, 'images', f) for f in sorted(os.listdir(os.path.join(basedir, 'images'))) \
             if f.endswith('JPG') or f.endswith('jpg') or f.endswith('png')][0]
     sh = imageio.imread(img0).shape
