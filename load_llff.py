@@ -114,7 +114,7 @@ def _load_data(basedir, factor=None, width=None, height=None, load_imgs=True):
     poses[:2, 4, :] = np.array(sh[:2]).reshape([2, 1])
     poses[2, 4, :] = poses[2, 4, :] * 1./factor
     
-    if render_poses_arr is not None:
+    if render_poses is not None:
         render_poses[:2, 4, :] = np.array(sh[:2]).reshape([2, 1])
         render_poses[2, 4, :] = render_poses[2, 4, :] * 1./factor
     # NOTE: The focal length of "render poses" is incorrect !
