@@ -280,7 +280,9 @@ def load_llff_data(basedir, factor=8, recenter=True, bd_factor=.75, spherify=Fal
     render_exist = isinstance(render_poses, np.ndarray)
     # Correct rotation matrix ordering and move variable dim to axis 0
     poses = np.concatenate([poses[:, 1:2, :], -poses[:, 0:1, :], poses[:, 2:, :]], 1)
+    render_poses = np.concatenate([render_poses[:, 1:2, :], -render_poses[:, 0:1, :], render_poses[:, 2:, :]], 1) if render_exist else None
     poses = np.moveaxis(poses, -1, 0).astype(np.float32)
+    render_poses = np.moveaxis(render_poses, -1, 0).astype(np.float32) if render_exist else None
     imgs = np.moveaxis(imgs, -1, 0).astype(np.float32)
     images = imgs
     bds = np.moveaxis(bds, -1, 0).astype(np.float32)
@@ -288,6 +290,8 @@ def load_llff_data(basedir, factor=8, recenter=True, bd_factor=.75, spherify=Fal
     # Rescale if bd_factor is provided
     sc = 1. if bd_factor is None else 1./(bds.min() * bd_factor)
     poses[:,:3,3] *= sc
+    if render_exist:
+        render_poses[:, :3, 3] *= sc
     bds *= sc
     
     if recenter:
