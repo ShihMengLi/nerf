@@ -64,7 +64,18 @@ def _load_data(basedir, factor=None, width=None, height=None, load_imgs=True):
     poses_arr = np.load(os.path.join(basedir, 'poses_bounds.npy'))
     poses = poses_arr[:, :-2].reshape([-1, 3, 5]).transpose([1,2,0])
     bds = poses_arr[:, -2:].transpose([1,0])
-    
+
+    # Loading poses represents the camera trajectory of output testing video
+    # Default is None
+    render_poses = None
+    if os.path.isfile(os.path.join(base_dir, 'traj_15-fmt.txt')):
+        with open(os.path.join(base_dir, 'traj_15-fmt.txt'), 'r') as handle:
+            handle.readline()
+            render_poses_arr = np.loadtxt(handle)
+            render_poses = render_poses_arr[:, :-2].reshape([-1, 3, 5]).transpose([1,2,0])
+            # x = np.transpose(np.reshape(x, [-1,5,3]), [0,2,1])
+            # x = np.concatenate([-x[...,1:2], x[...,0:1], x[...,2:]], -1)
+
     img0 = [os.path.join(basedir, 'images', f) for f in sorted(os.listdir(os.path.join(basedir, 'images'))) \
             if f.endswith('JPG') or f.endswith('jpg') or f.endswith('png')][0]
     sh = imageio.imread(img0).shape
@@ -103,6 +114,10 @@ def _load_data(basedir, factor=None, width=None, height=None, load_imgs=True):
     poses[:2, 4, :] = np.array(sh[:2]).reshape([2, 1])
     poses[2, 4, :] = poses[2, 4, :] * 1./factor
     
+    if render_poses_arr is not None:
+        render_poses[:2, 4, :] = np.array(sh[:2]).reshape([2, 1])
+        render_poses[2, 4, :] = render_poses[2, 4, :] * 1./factor
+
     if not load_imgs:
         return poses, bds
     
@@ -116,7 +131,7 @@ def _load_data(basedir, factor=None, width=None, height=None, load_imgs=True):
     imgs = np.stack(imgs, -1)  
     
     print('Loaded image data', imgs.shape, poses[:,-1,0])
-    return poses, bds, imgs
+    return [poses, render_poses], bds, imgs
 
     
             
@@ -164,19 +179,30 @@ def render_path_spiral(c2w, up, rads, focal, zdelta, zrate, rots, N):
     
 
 
-def recenter_poses(poses):
+def recenter_poses(poses, render_poses=None):
 
+    render_exist = isinstance(render_poses, np.ndarray)
     poses_ = poses+0
     bottom = np.reshape([0,0,0,1.], [1,4])
     c2w = poses_avg(poses)
     c2w = np.concatenate([c2w[:3,:4], bottom], -2)
+    render_bottom = np.tile(np.reshape(bottom, [1,1,4]), [render_poses.shape[0],1,1]) if render_exist else None
     bottom = np.tile(np.reshape(bottom, [1,1,4]), [poses.shape[0],1,1])
+    render_poses = np.concatenate([render_poses[:,:3,:4], render_bottom], -2) if render_exist else None
     poses = np.concatenate([poses[:,:3,:4], bottom], -2)
 
+    render_poses = np.linalg.inv(c2w) @ render_poses if render_exist else None
     poses = np.linalg.inv(c2w) @ poses
+    
+    render_poses_[:,:3,:4] = render_poses[:,:3,:4] if render_exist else None
     poses_[:,:3,:4] = poses[:,:3,:4]
+
+    render_poses = render_poses_ if render_exist else None
     poses = poses_
-    return poses
+
+    rt_poses = [poses, render_poses] if render_exist else poses
+
+    return rt_poses
 
 
 #####################
@@ -241,11 +267,14 @@ def spherify_poses(poses, bds):
     return poses_reset, new_poses, bds
     
 
-def load_llff_data(basedir, factor=8, recenter=True, bd_factor=.75, spherify=False, path_zflat=False, render_poses_fi=""):
+def load_llff_data(basedir, factor=8, recenter=True, bd_factor=.75, spherify=False, path_zflat=False):
     
     poses, bds, imgs = _load_data(basedir, factor=factor) # factor=8 downsamples original imgs by 8x
     print('Loaded', basedir, bds.min(), bds.max())
     
+    # Extract poses for training and poses for testing from the list "poses"
+    poses, render_poses = poses
+    render_exist = isinstance(render_poses, np.ndarray)
     # Correct rotation matrix ordering and move variable dim to axis 0
     poses = np.concatenate([poses[:, 1:2, :], -poses[:, 0:1, :], poses[:, 2:, :]], 1)
     poses = np.moveaxis(poses, -1, 0).astype(np.float32)
@@ -259,13 +288,13 @@ def load_llff_data(basedir, factor=8, recenter=True, bd_factor=.75, spherify=Fal
     bds *= sc
     
     if recenter:
-        poses = recenter_poses(poses)
-        
+        poses = recenter_poses(poses, render_poses)
+        if render_exist:
+            poses, render_poses = poses
+    # NOTE: We haven't handled the case for user specified testing poses under spherify case.
     if spherify:
         poses, render_poses, bds = spherify_poses(poses, bds)
-
     else:
-        
         c2w = poses_avg(poses)
         print('recentered', c2w.shape)
         print(c2w[:3,:4])
@@ -297,8 +326,8 @@ def load_llff_data(basedir, factor=8, recenter=True, bd_factor=.75, spherify=Fal
             N_views/=2
 
         # Generate poses for spiral path
-        if isinstance(render_poses_fi, str) and len(render_poses_fi) > 0:
-            pass
+        if render_exist:
+            import pdb; pdb.set_trace()
         else:
             render_poses = render_path_spiral(c2w_path, up, rads, focal, zdelta, zrate=.5, rots=N_rots, N=N_views)
         
