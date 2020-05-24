@@ -676,7 +676,7 @@ def train():
     }
     render_kwargs_train.update(bds_dict)
     render_kwargs_test.update(bds_dict)
-
+    import pdb; pdb.set_trace()
     # Short circuit if only rendering out from trained model
     if args.render_only:
         print('RENDER ONLY')
