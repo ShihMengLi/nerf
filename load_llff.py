@@ -334,7 +334,7 @@ def load_llff_data(basedir, factor=8, recenter=True, bd_factor=.75, spherify=Fal
 
         # Generate poses for spiral path
         if render_exist:
-            import pdb; pdb.set_trace()
+            pass
         else:
             render_poses = render_path_spiral(c2w_path, up, rads, focal, zdelta, zrate=.5, rots=N_rots, N=N_views)
         
