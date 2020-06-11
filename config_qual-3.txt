@@ -1,0 +1,14 @@
+expname = qual_2d0e6766c725becc_304771133_304637667
+basedir = ./logs
+datadir = ./data/selected_examples/2d0e6766c725becc_304771133_304637667/
+dataset_type = llff
+
+factor = 1
+llffhold = 8
+
+N_rand = 1024
+N_samples = 64
+N_importance = 64
+
+use_viewdirs = True
+raw_noise_std = 1e0

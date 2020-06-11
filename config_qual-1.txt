@@ -1,0 +1,15 @@
+expname = qual_12a70416c92a9483_96729967_96596500
+basedir = ./logs
+datadir = ./data/selected_examples/12a70416c92a9483_96729967_96596500/
+dataset_type = llff
+
+factor = 1
+llffhold = 8
+
+N_rand = 1024
+N_samples = 64
+N_importance = 64
+
+use_viewdirs = True
+raw_noise_std = 1e0
+
